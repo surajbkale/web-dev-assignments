@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quiz App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-100 min-h-screen flex items-center justify-center">
+    <div
+      id="quizBox"
+      class="w-full max-w-md bg-white p-6 rounded-2xl shadow-lg space-y-6"
+    >
+      <!-- Question -->
+      <div id="question" class="text-xl font-semibold text-gray-800"></div>
+      <!-- Options -->
+      <form id="quizForm" class="space-y-4">
+        <label class="flex items-center gap-3 cursor-pointer">
+          <input type="radio" name="option" value="a" class="accent-blue-500" />
+          <span id="a_text"></span>
+        </label>
+        <label class="flex items-center gap-3 cursor-pointer">
+          <input type="radio" name="option" value="b" class="accent-blue-500" />
+          <span id="b_text"></span>
+        </label>
+        <label class="flex items-center gap-3 cursor-pointer">
+          <input type="radio" name="option" value="c" class="accent-blue-500" />
+          <span id="c_text"></span>
+        </label>
+        <label class="flex items-center gap-3 cursor-pointer">
+          <input type="radio" name="option" value="d" class="accent-blue-500" />
+          <span id="d_text"></span>
+        </label>
+        <button
+          type="submit"
+          class="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded-xl"
+        >
+          submit
+        </button>
+      </form>
+
+      <!-- Score Display -->
+      <div
+        id="result"
+        class="hidden text-center text-xl font-semibold text-green-600"
+      ></div>
+    </div>
+    <script type="module" src="./script.js"></script>
+  </body>
+</html>

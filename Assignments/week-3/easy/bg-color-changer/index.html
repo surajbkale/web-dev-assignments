@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Background Color Changer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body
+    class="bg-gray-100 min-h-screen flex flex-col items-center justify-center relative"
+  >
+    <!-- Add Color Input (fixed at top) -->
+    <div
+      class="fixed top-4 left-1/2 transform -translate-x-1/2 flex gap-3 items-center bg-white shadow-md p-4 rounded-xl"
+    >
+      <input
+        type="text"
+        id="colorInput"
+        placeholder="Enter color name or code"
+        class="border border-gray-300 rounded-xl px-3 py-2 focus:outline-none"
+      />
+      <button
+        onclick="addNewColor()"
+        class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-xl"
+      >
+        Add
+      </button>
+    </div>
+
+    <!-- Color Palette -->
+    <div
+      class="grid grid-cols-2 md:grid-cols-4 gap-6 p-6 bg-white rounded-2xl shadow-xl mt-20"
+    >
+      <!-- Red Button -->
+      <div class="flex flex-col items-center">
+        <button
+          onclick="changeColor('red')"
+          class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-xl"
+        >
+          Red
+        </button>
+      </div>
+
+      <!-- Blue Button -->
+      <div class="flex flex-col items-center">
+        <button
+          onclick="changeColor('blue')"
+          class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-xl"
+        >
+          Blue
+        </button>
+      </div>
+
+      <!-- Yellow Button -->
+      <div class="flex flex-col items-center">
+        <button
+          onclick="changeColor('yellow')"
+          class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded-xl"
+        >
+          Yellow
+        </button>
+      </div>
+
+      <!-- Gray Button -->
+      <div class="flex flex-col items-center">
+        <button
+          onclick="changeColor('gray')"
+          class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-xl"
+        >
+          Gray
+        </button>
+      </div>
+    </div>
+
+    <script src="index.js"></script>
+  </body>
+</html>

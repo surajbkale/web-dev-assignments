@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Pokemon</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-100 min-h-screen p-6">
+    <!-- Heading -->
+    <h1 class="text-3xl font-bold text-center mb-6">Pokémon Cards</h1>
+
+    <!-- Input Section -->
+    <div
+      class="max-w-2xl mx-auto flex flex-wra items-center justify-center gap-4 mb-8"
+    >
+      <input
+        type="number"
+        id="numberInput"
+        placeholder="No. of Pokemon"
+        class="border border-gray-300 rounded-xl px-4 py-2 w-40"
+      />
+      <select
+        id="typeSelect"
+        class="border border-gray-300 rounded-xl px-4 py-2 w-40"
+      >
+        <option value="">All Types</option>
+        <option value="grass">Grass</option>
+        <option value="fire">fire</option>
+        <option value="water">Water</option>
+        <option value="electric">Electric</option>
+        <option value="poison">Posion</option>
+        <option value="flying">Flying</option>
+        <option value="normal">Normal</option>
+        <option value="bug">Bug</option>
+      </select>
+      <button
+        onclick="fetchPokemons()"
+        class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-xl"
+      >
+        Fetch Pokemons
+      </button>
+    </div>
+
+    <!-- Card Section -->
+    <div
+      id="cardContainer"
+      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 max-w-5xl mx-auto"
+    ></div>
+    <script src="script.js"></script>
+  </body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Form Builder</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-100 min-h-screen flex items-center justify-center p-6">
+    <div class="w-full max-w-6xl grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Form Builder Panel -->
+      <div class="bg-white p-6 rounded-xl shadow space-y-4">
+        <h2 class="text-2xl font-semibold mb-4">Form Builder</h2>
+
+        <label class="block font-medium">Select Field Type</label>
+        <select
+          id="fieldType"
+          class="border border-gray-300 rounded px-3 py-2 w-full"
+        >
+          <option value="text">Text Input</option>
+          <option value="checkBox">checkBox</option>
+          <option value="radio">Radio Button</option>
+        </select>
+
+        <label class="block font-medium">Field Label</label>
+        <input
+          type="text"
+          id="fieldLabel"
+          placeholder="Enter field label"
+          class="border border-gray-300 rounded px-3 py-2 w-full"
+        />
+
+        <button
+          onclick="addField()"
+          class="bg-gray-600 text-white w-full py-2 rounded hover:bg-blue-700"
+        >
+          Add Field
+        </button>
+      </div>
+
+      <!-- form Preview Panel -->
+      <div class="bg-white p-6 rounded-xl shadow">
+        <h2 class="text-2xl font-semibold mb-4">Form Preview</h2>
+        <form id="formPreview" class="space-y-4"></form>
+      </div>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>
