@@ -1,31 +1,42 @@
 const { Router } = require("express");
-const adminMiddleware = require("../middleware/user");
+const { Todo } = require("../database/index.js");
+const userMiddleware = require("../middleware/user.js");
+
 const router = Router();
 
 // todo Routes
-router.post('/', (req, res) => {
-    // Implement todo creation logic
+router.post("/", userMiddleware, async (req, res) => {
+  const { title, userId } = req.body;
+  const todo = await Todo.create({ title, user: userId });
+  res.status(201).json(todo);
 });
 
-router.put('/', adminMiddleware, (req, res) => {
-    // Implement update todo  logic
+router.put("/", userMiddleware, async (req, res) => {
+  const { id, title, completed } = req.body;
+  const todo = await Todo.findByIdAndUpdate(
+    { id, title, completed },
+    { new: true }
+  );
+  res.status(200).json(todo);
 });
 
-router.delete('/', adminMiddleware, (req, res) => {
-    // Implement delete todo logic
+// router.delete("/", userMiddleware, async(req, res) => {
+//   // Implement delete todo logic
+// });
+
+router.delete("/:id", userMiddleware, async (req, res) => {
+  await Todo.findByIdAndDelete(req.params.id);
+  res.status(200).json({ message: `Todo deleted` });
 });
 
-router.delete('/:id', adminMiddleware, (req, res) => {
-    // Implement delete todo by id logic
+router.get("/", userMiddleware, async (req, res) => {
+  const todos = await Todo.find();
+  res.status(200).json(todos);
 });
 
-
-router.get('/', adminMiddleware, (req, res) => {
-    // Implement fetching all todo logic
-});
-
-router.get('/:id', adminMiddleware, (req, res) => {
-    // Implement fetching todo by id logic
+router.get("/:id", userMiddleware, async (req, res) => {
+  const todo = await Todo.findById(req.params.id);
+  res.status(200).json(todo);
 });
 
 module.exports = router;
