@@ -3,8 +3,10 @@ const mongoose = require("mongoose");
 const userRoutes = require("./routes/user.js");
 const todoRoutes = require("./routes/todo.js");
 const dotenv = require("dotenv").config();
+const cors = require("cors");
 
 const app = express();
+app.use(cors());
 
 mongoose
   .connect(process.env.MONGO_URI)
