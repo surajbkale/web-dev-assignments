@@ -1,23 +1,32 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 function App() {
-  const [count, setCount] = useState(0);
-  console.log("counter");
-
-  useEffect(function () {
-    setInterval(function () {
-      setCount((count) => count + 1);
-    }, 1000);
-  }, []);
-
-
 
   return (
     <div>
-      <h1>{count}</h1>
-      {/* <button onClick={incrementCount}>Increase Count</button> */}
+      <div style={{background: "#dfe6e9", height: "100vh"}}>
+        <ToggleMessage/>
+        <ToggleMessage/>
+        <ToggleMessage/>
+      </div>
     </div>
   );
 }
+
+const ToggleMessage = () => {
+  const [isVisible, setIsVisible] = useState(true);
+
+  console.log("Re-render");
+  function toggle() {
+    setIsVisible(!isVisible);
+  }
+
+  return (
+    <div>
+      <button onClick={toggle}>Toggle Message</button>
+      {isVisible && <p>This message is conditionally rendered</p>}
+    </div>
+  );
+};
 
 export default App;
