@@ -1,4 +1,3 @@
-import { useState } from "react";
 import Header from "./components/Header";
 import PetAdoptionForm from "./components/PetAdoptionForm";
 import "./myApp.css";
@@ -18,5 +17,4 @@ const App = () => {
     </div>
   );
 };
-
 export default App;

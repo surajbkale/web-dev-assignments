@@ -1,15 +1,15 @@
-function App() {
-  return (
-    <>
-      <div className="grid grid-cols-12">
-        <div className="col-span-12 sm:col-span-5 bg-[#4a4a4a]">Hi...</div>
-        <div className="col-span-12 sm:col-span-4 bg-green-400">Hello...</div>
-        <div className="col-span-12 sm:col-span-3 bg-orange-500">
-          Namaste...
-        </div>
-      </div>
-    </>
-  );
-}
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import AgeVerification from "./pages/AgeVerification";
+import EmailEntry from "./pages/EmailEntry";
+import OTPVerification from "./pages/OTPVerification";
 
+const App = () => (
+  <Router>
+    <Routes>
+      <Route path="/" element={<AgeVerification />} />
+      <Route path="/email" element={<EmailEntry />} />
+      <Route path="/verify" element={<OTPVerification />} />
+    </Routes>
+  </Router>
+);
 export default App;
