@@ -1,0 +1,391 @@
+import React, { useState } from 'react';
+import { 
+  Star, 
+  Play, 
+  RotateCcw, 
+  Filter, 
+  Menu, 
+  X, 
+  Lock,
+  Settings,
+  Check
+} from 'lucide-react';
+
+// Mock data
+const questionsData = [
+  { id: 14, title: "Longest Common Prefix", difficulty: "Easy", solved: true },
+  { id: 217, title: "Contains Duplicate", difficulty: "Easy", solved: true },
+  { id: 125, title: "Valid Palindrome", difficulty: "Easy", solved: true },
+  { id: 26, title: "Remove Duplicates from Sorted Array", difficulty: "Easy", solved: true },
+  { id: 66, title: "Plus One", difficulty: "Easy", solved: true },
+  { id: 136, title: "Single Number", difficulty: "Easy", solved: true },
+  { id: 121, title: "Best Time to Buy and Sell Stock", difficulty: "Easy", solved: true },
+  { id: 88, title: "Merge Sorted Array", difficulty: "Easy", solved: true },
+  { id: 69, title: "Sqrt(x)", difficulty: "Easy", solved: true },
+  { id: 206, title: "Reverse Linked List", difficulty: "Easy", solved: true },
+  { id: 141, title: "Linked List Cycle", difficulty: "Easy", solved: true }
+];
+
+const progressStats = {
+  total: 19,
+  solved: 19,
+  easy: { solved: 11, total: 11 },
+  medium: { solved: 7, total: 7 },
+  hard: { solved: 1, total: 1 }
+};
+
+// Icon Component
+const StarIcon = ({ className = "w-5 h-5" }) => (
+  <Star className={className} fill="currentColor" />
+);
+
+// Sidebar Component
+const Sidebar = ({ isOpen, onClose }) => {
+  return (
+    <>
+      {/* Overlay for mobile */}
+      {isOpen && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 z-10 md:hidden"
+          onClick={onClose}
+        />
+      )}
+      
+      {/* Sidebar */}
+      <div className={`
+        w-64 bg-gray-800 p-4 transform transition-transform duration-300 
+        ${isOpen ? 'translate-x-0' : '-translate-x-full'} 
+        md:translate-x-0 fixed md:relative z-20 h-full
+      `}>
+        {/* Mobile close button */}
+        <button 
+          onClick={onClose}
+          className="md:hidden absolute top-4 right-4 text-gray-400 hover:text-white"
+        >
+          <X className="w-6 h-6" />
+        </button>
+        
+        <div className="mb-6">
+          <h2 className="text-lg font-semibold text-gray-300 mb-4">My Lists</h2>
+          <p className="text-sm text-gray-400 mb-4">Created by me</p>
+          
+          <div className="flex items-center space-x-2 bg-gray-700 p-3 rounded">
+            <div className="w-8 h-8 bg-orange-500 rounded flex items-center justify-center">
+              <StarIcon className="w-5 h-5 text-white" />
+            </div>
+            <span className="text-white font-medium">Favorite</span>
+            <Lock className="w-4 h-4 text-gray-400 ml-auto" />
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
+
+// Progress Circle Component
+const ProgressCircle = ({ solved, total, percentage = 100 }) => {
+  const circumference = 251.2;
+  const strokeDashoffset = circumference - (circumference * percentage) / 100;
+  
+  return (
+    <div className="relative w-32 h-32 mx-auto mb-4">
+      <svg className="w-32 h-32 transform -rotate-90" viewBox="0 0 100 100">
+        <circle 
+          cx="50" cy="50" r="40" 
+          stroke="rgb(55, 65, 81)" 
+          strokeWidth="8" 
+          fill="none"
+        />
+        <circle 
+          cx="50" cy="50" r="40" 
+          stroke="rgb(34, 197, 94)" 
+          strokeWidth="8" 
+          fill="none"
+          strokeDasharray={circumference}
+          strokeDashoffset={strokeDashoffset}
+          className="transition-all duration-500 ease-in-out"
+        />
+      </svg>
+      <div className="absolute inset-0 flex flex-col items-center justify-center">
+        <span className="text-2xl font-bold">
+          {solved}<span className="text-lg text-gray-400">/{total}</span>
+        </span>
+        <span className="text-sm text-gray-400">Solved</span>
+      </div>
+    </div>
+  );
+};
+
+// Progress Stats Component
+const ProgressStats = ({ stats }) => (
+  <div className="space-y-2">
+    <div className="flex justify-between">
+      <span className="text-cyan-400">Easy</span>
+      <span className="text-cyan-400">{stats.easy.solved}/{stats.easy.total}</span>
+    </div>
+    <div className="flex justify-between">
+      <span className="text-yellow-400">Med.</span>
+      <span className="text-yellow-400">{stats.medium.solved}/{stats.medium.total}</span>
+    </div>
+    <div className="flex justify-between">
+      <span className="text-red-400">Hard</span>
+      <span className="text-red-400">{stats.hard.solved}/{stats.hard.total}</span>
+    </div>
+  </div>
+);
+
+// Progress Section Component
+const ProgressSection = ({ stats }) => (
+  <div className="bg-gray-800 p-6 rounded-lg">
+    <div className="flex items-center justify-between mb-4">
+      <h3 className="text-lg font-semibold">Progress</h3>
+      <button className="text-gray-400 hover:text-white">
+        <RotateCcw className="w-5 h-5" />
+      </button>
+    </div>
+    
+    <ProgressCircle solved={stats.solved} total={stats.total} />
+    
+    <div className="text-center text-sm text-gray-400 mb-4">0 Attempting</div>
+    
+    <ProgressStats stats={stats} />
+  </div>
+);
+
+// Filter Component
+const Filter = ({ filters, onFilterChange, onReset }) => {
+  const difficultyColors = {
+    Easy: 'text-cyan-400',
+    Medium: 'text-yellow-400',
+    Hard: 'text-red-400'
+  };
+
+  return (
+    <div className="bg-gray-800 p-4 rounded-lg mb-6">
+      <div className="flex items-center justify-between mb-4">
+        <button className="bg-white text-black px-4 py-2 rounded-full text-sm font-medium flex items-center space-x-2">
+          <Filter className="w-4 h-4" />
+          <span>Filter</span>
+        </button>
+        {filters.difficulty.includes('Easy') && (
+          <div className="bg-gray-700 text-cyan-400 px-3 py-1 rounded-full text-sm">
+            Easy
+            <button 
+              onClick={() => onFilterChange('difficulty', 'Easy')}
+              className="ml-2 text-gray-400 hover:text-white"
+            >
+              ×
+            </button>
+          </div>
+        )}
+      </div>
+
+      <div className="space-y-4">
+        <div>
+          <h4 className="text-sm font-medium mb-2">Status</h4>
+          <div className="flex space-x-4">
+            {['Todo', 'Solved', 'Attempted'].map((status) => (
+              <label key={status} className="flex items-center space-x-2">
+                <input 
+                  type="checkbox" 
+                  className="rounded bg-gray-700 border-gray-600"
+                  checked={filters.status.includes(status)}
+                  onChange={() => onFilterChange('status', status)}
+                />
+                <span className="text-sm">{status}</span>
+              </label>
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <h4 className="text-sm font-medium mb-2">Difficulty</h4>
+          <div className="flex space-x-4">
+            {['Easy', 'Medium', 'Hard'].map((difficulty) => (
+              <label key={difficulty} className="flex items-center space-x-2">
+                <input 
+                  type="checkbox" 
+                  className="rounded bg-gray-700 border-gray-600"
+                  checked={filters.difficulty.includes(difficulty)}
+                  onChange={() => onFilterChange('difficulty', difficulty)}
+                />
+                <span className={`text-sm ${difficultyColors[difficulty]}`}>
+                  {difficulty}
+                </span>
+              </label>
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <label className="flex items-center space-x-2">
+            <input 
+              type="checkbox" 
+              className="rounded bg-gray-700 border-gray-600"
+              checked={filters.showTags}
+              onChange={() => onFilterChange('showTags')}
+            />
+            <span className="text-sm">Show tags</span>
+          </label>
+        </div>
+
+        <button 
+          onClick={onReset}
+          className="text-gray-400 hover:text-white text-sm flex items-center space-x-2"
+        >
+          <RotateCcw className="w-4 h-4" />
+          <span>Reset</span>
+        </button>
+      </div>
+    </div>
+  );
+};
+
+// Question Item Component
+const QuestionItem = ({ question }) => {
+  const difficultyColors = {
+    Easy: 'text-cyan-400',
+    Medium: 'text-yellow-400',
+    Hard: 'text-red-400'
+  };
+
+  return (
+    <div className="bg-gray-800 p-4 rounded-lg flex items-center justify-between hover:bg-gray-750 transition-colors cursor-pointer">
+      <div className="flex items-center space-x-3">
+        {question.solved && (
+          <Check className="w-5 h-5 text-green-400" />
+        )}
+        <span className="text-white">
+          {question.id}. {question.title}
+        </span>
+      </div>
+      <span className={`text-sm ${difficultyColors[question.difficulty]}`}>
+        {question.difficulty}
+      </span>
+    </div>
+  );
+};
+
+// Questions List Component
+const QuestionsList = ({ questions }) => (
+  <div className="space-y-3">
+    {questions.map((question) => (
+      <QuestionItem key={question.id} question={question} />
+    ))}
+  </div>
+);
+
+// Header Component
+const Header = () => (
+  <div className="mb-8">
+    <div className="flex items-center space-x-4 mb-4">
+      <div className="w-16 h-16 bg-white rounded-lg flex items-center justify-center">
+        <StarIcon className="w-10 h-10 text-orange-500" />
+      </div>
+      <div>
+        <h1 className="text-3xl font-bold">Favorite</h1>
+        <div className="flex items-center space-x-2 text-gray-400">
+          <span>Sumana</span>
+          <span>•</span>
+          <span>19 questions</span>
+          <span>•</span>
+          <Lock className="w-4 h-4" />
+          <span>Private</span>
+        </div>
+      </div>
+    </div>
+
+    <div className="flex space-x-4">
+      <button className="bg-white text-black px-6 py-2 rounded-full font-medium flex items-center space-x-2 hover:bg-gray-100 transition-colors">
+        <Play className="w-4 h-4" fill="currentColor" />
+        <span>Practice</span>
+      </button>
+      <button className="text-gray-400 hover:text-white p-2 transition-colors">
+        <Settings className="w-5 h-5" />
+      </button>
+    </div>
+  </div>
+);
+
+// Main App Component
+const LeetCodeFavorites = () => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [filters, setFilters] = useState({
+    status: [],
+    difficulty: ['Easy'],
+    showTags: false
+  });
+
+  const handleFilterChange = (type, value) => {
+    if (type === 'showTags') {
+      setFilters(prev => ({ ...prev, showTags: !prev.showTags }));
+      return;
+    }
+
+    setFilters(prev => ({
+      ...prev,
+      [type]: prev[type].includes(value) 
+        ? prev[type].filter(item => item !== value)
+        : [...prev[type], value]
+    }));
+  };
+
+  const handleResetFilters = () => {
+    setFilters({
+      status: [],
+      difficulty: [],
+      showTags: false
+    });
+  };
+
+  const filteredQuestions = questionsData.filter(question => {
+    if (filters.difficulty.length > 0 && !filters.difficulty.includes(question.difficulty)) {
+      return false;
+    }
+    return true;
+  });
+
+  return (
+    <div className="bg-gray-900 text-white min-h-screen">
+      <div className="flex h-screen">
+        <Sidebar 
+          isOpen={sidebarOpen} 
+          onClose={() => setSidebarOpen(false)} 
+        />
+
+        {/* Main Content */}
+        <div className="flex-1 p-6 overflow-auto">
+          {/* Mobile menu button */}
+          <button 
+            onClick={() => setSidebarOpen(true)}
+            className="md:hidden mb-4 p-2 text-gray-400 hover:text-white"
+          >
+            <Menu className="w-6 h-6" />
+          </button>
+
+          <Header />
+
+          {/* Progress Section and Filter */}
+          <div className="flex flex-col lg:flex-row gap-6">
+            {/* Progress Section */}
+            <div className="lg:w-1/3">
+              <ProgressSection stats={progressStats} />
+            </div>
+
+            {/* Filter and Questions */}
+            <div className="lg:w-2/3">
+              <Filter 
+                filters={filters}
+                onFilterChange={handleFilterChange}
+                onReset={handleResetFilters}
+              />
+              <QuestionsList questions={filteredQuestions} />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default LeetCodeFavorites;
